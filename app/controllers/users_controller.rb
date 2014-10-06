@@ -66,4 +66,5 @@ class UsersController < ApplicationController
   def admin_user
     redirect_to(users_path) unless current_user.admin?
   end
+
 end

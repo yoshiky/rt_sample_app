@@ -14,7 +14,6 @@ describe "Authentications" do
       before { click_button 'Sign in' }
 
       it { should have_title('Sign in') }
-      #it { should have_selector('div.alert.alert-error', text: 'Invalid') }
       it { should have_error_message('Invalid') }
 
       describe "after visiting another page" do
@@ -25,11 +24,6 @@ describe "Authentications" do
 
     describe "with valid information" do
       let(:user) { FactoryGirl.create(:user) }
-     #before do
-     #  fill_in "Email", with: user.email.upcase
-     #  fill_in "Password", with: user.password
-     #  click_button "Sign in"
-     #end
       before { valid_signin(user) }
 
       it { should have_title(user.name) }
@@ -42,6 +36,8 @@ describe "Authentications" do
       describe "followed by signout" do
         before { click_link "Sign out" }
         it { should have_link('Sign in') }
+        it { should_not have_link('Profile') }
+        it { should_not have_link('Settings') }
       end
     end
 
@@ -76,6 +72,7 @@ describe "Authentications" do
         before { patch user_path(user) }
         specify { expect(response).to redirect_to(signin_path) }
       end
+
     end
 
     describe "as wrong user" do
@@ -111,9 +108,7 @@ describe "Authentications" do
             expect(page).to have_title("Edit user")
           end
         end
-
       end
-
     end
 
     describe "as non-admin user" do
@@ -126,8 +121,6 @@ describe "Authentications" do
         before { delete user_path(user) }
         specify { expect(request).to redirect_to(users_path) }
       end
-
-
     end
 
   end
